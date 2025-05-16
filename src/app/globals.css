@@ -34,6 +34,34 @@ a {
   color: inherit;
   text-decoration: none;
 }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espaciado entre los elementos del formulario */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #ffffff; /* Fondo blanco para el formulario */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para un diseño más atractivo */
+}
+textarea {
+  width: 300px;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* Evita que el usuario cambie el tamaño del textarea */
+}
+pre {
+  white-space: pre-wrap; /* Permite que el texto se ajuste automáticamente */
+  width: 300px;
+  height: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* Evita que el usuario cambie el tamaño del textarea */
+}
+
 
 @media (prefers-color-scheme: dark) {
   html {
