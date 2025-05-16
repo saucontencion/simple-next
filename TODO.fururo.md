@@ -1,0 +1,2 @@
+### usar typescript para el server con "tsc " para la ejecucion el script  del packages.json
+- en algun proyecto quizas dentro de los helpers e la packagejson use tsc, node tsc para ejecutar en typescipt el server quizas o compilar de forma manual 
