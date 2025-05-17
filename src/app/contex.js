@@ -1,18 +1,45 @@
 
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState,useRef } from "react";
 import { createContext } from "react";
 import Peer from 'simple-peer'
+import { io } from "socket.io-client";
 
 
 export const PeerContext = createContext(null);
 
 export const ContextProvider = (props) => {
-  const [peer,setPeer] = useState();
-  //que se ejecute al iniciar la pagina
-   useEffect(()=>{
-    
+  const [peer,setPeer] = useState(null);
+
+  const [socket, setSocket] = useState(null);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
+  const [sdp,setSdp]= useState(null)
+
+
+  const peerRef = useRef(null);
+  const sdpRef = useRef(null);
+  const socketRef = useRef(null)
+
+  const emitSignal = useCallback(() => {
+      console.log('emitSiganl sdp',sdp);
+      console.log(typeof(peer));
+      console.log(peer);
+      if(!peer){
+         inicializarPeer(true)
+         emitSignal()
+         return
+      }
+      peerRef.current.signal(sdpRef.current)
+
+      //aqui deberia ir pero sdp.current esta vacio, poner el peer en use effect no mas
+  }, [peer,socket,sdp,peerRef,sdpRef,socketRef]);
+
+
+  const inicializarPeer = useCallback((initiator) => {
+
+    console.log('og');
+    { 
     const p = new Peer({
-      initiator: location.hash === '#1',
+      initiator,
       trickle: false
     })
     
@@ -20,14 +47,14 @@ export const ContextProvider = (props) => {
     
     p.on('signal', data => { //el que tenga el initiator en true lo comienza
       console.log('SIGNAL', JSON.stringify(data))
-      document.querySelector('#outgoing').textContent = JSON.stringify(data)
-    })
-    //  yo copio lo que sale de data y lo paso a signal
-    document.querySelector('form').addEventListener('submit', ev => {
-      ev.preventDefault()
-      p.signal(JSON.parse(document.querySelector('#incoming').value))
+      // el escribir va a ser el socket emit(werbrtcSignal o guardar el sdp no mas)
+      let signalpre = JSON.stringify(data);
+      let dataSignal = signalpre.slice(0)
+      setSdp(dataSignal)
+      sdpRef.current = dataSignal
     })
     
+    socketRef.current.emit('werbrtcSignal', sdpRef.current)
     p.on('connect', () => {
       console.log('CONNECT')
       p.send('whatever' + Math.random())
@@ -38,19 +65,65 @@ export const ContextProvider = (props) => {
     })
     
     setPeer(p)
-  },[])
+    peerRef.current = p
+  }
+    //emitir pee.signal y emitir socket.emit(werbrtcSignal)
+  }, [peer,socket,sdp,peerRef,sdpRef,socketRef]);
+
+
+    // initialize socket
+    useEffect(() => {
+        const initializeSocket = async () => {
+            const socketInstance = io();
+            setSocket(socketInstance);
+            socketRef.current=socketInstance
+        };
+
+        if (!socket) {
+            initializeSocket();
+        }
+
+        if (socket && !isSocketConnected) {
+            socket.connect();
+        }
+
+
+        const onConnect = () => {
+            setIsSocketConnected(true);
+            console.log("CONNECTED AL SOCKET");
+        };
+
+        const onDisconnect = () => {
+            setIsSocketConnected(false);
+            console.log("DISCONNECTED");
+        };
+
+        if (socket) {
+            socket.on("connect", onConnect);
+            socket.on("disconnect", onDisconnect);
+        }
+
+        return () => {
+            if (socket) {
+                socket.off("connect", onConnect);
+                socket.off("disconnect", onDisconnect);
+            }
+        };
+    }, [socket, isSocketConnected]);
 
   return (
     <PeerContext.Provider
         value={{
             peer,
+            socket,
+            emitSignal,
         }}
         {...props}
     />
   );
 }
 
-export const usePeer = () => {
+export const useContextHook = () => {
     const context = useContext(PeerContext);
     if (!context) {
         throw new Error('useSocket debe utilizar dentro de un socketprovider');

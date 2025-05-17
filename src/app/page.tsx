@@ -1,11 +1,10 @@
 'use client'
-import { usePeer } from "./contex";
+import { useContextHook } from "./contex";
 import styles from "./page.module.css";
 
 
 export default function Home() {
-  const {peer} = usePeer()
-
+  const {emitSignal,socket} = useContextHook()
   return (
     
     <div className={styles.page}>
@@ -15,6 +14,7 @@ export default function Home() {
           <button type="submit">submit</button>
         </form>
       </div>
+      <button onClick={()=>emitSignal()}>other button</button> {/* no pescar que no le puse signatura */}
       <pre id="outgoing"></pre>
     </div>
   );
