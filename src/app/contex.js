@@ -14,12 +14,9 @@ export const ContextProvider = (props) => {
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [sdp,setSdp]= useState(null)
 
-
   const peerRef = useRef(null);
   const sdpRef = useRef(null);
   const socketRef = useRef(null)
-
-  
   
   const inicializarPeer = useCallback((initiator) => {
     
@@ -58,25 +55,25 @@ export const ContextProvider = (props) => {
   //emitir pee.signal y emitir socket.emit(werbrtcSignal)
   }, [peer,socket,sdp]);
 
-const emitSignal = useCallback(() => {
-    if(!peerRef.current){
-       inicializarPeer(true)
-       return
-    }
-    peerRef.current.signal(sdpRef.current)
+  const emitSignal = useCallback(() => {
+      if(!peerRef.current){
+        inicializarPeer(true)
+        return
+      }
+      peerRef.current.signal(sdpRef.current)
 
-    //aqui deberia ir pero sdp.current esta vacio, poner el peer en use effect no mas
-}, []);
+      //aqui deberia ir pero sdp.current esta vacio, poner el peer en use effect no mas
+  }, []);
 
     // initialize socket
     useEffect(() => {
         const initializeSocket = async () => {
-            const socketInstance = io();
+            const socketInstance = await io();
             setSocket(socketInstance);
             socketRef.current=socketInstance
         };
 
-        if (!socket) {
+        if (!socketRef.current) {
             initializeSocket();
         }
 
@@ -106,7 +103,7 @@ const emitSignal = useCallback(() => {
                 socket.off("disconnect", onDisconnect);
             }
         };
-    }, [socket, isSocketConnected]);
+    }, [socketRef.current, isSocketConnected]);
 
   return (
     <PeerContext.Provider

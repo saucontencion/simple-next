@@ -1,5 +1,5 @@
 let webrtcSignal = (io,data)=>{
-    console.log('webrtcSignal io',io);
-    console.log('webrtc data' ,data);
+    console.log('webrtc data' ,data)
+    return;
 } ;
 export default {webrtcSignal}
