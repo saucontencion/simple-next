@@ -1,7 +1,7 @@
 
 import { useCallback, useContext, useEffect, useState,useRef } from "react";
 import { createContext } from "react";
-import Peer from 'simple-peer'
+import Peer from 'simple-peer';
 import { io } from "socket.io-client";
 
 
@@ -30,14 +30,16 @@ export const ContextProvider = (props) => {
       
     p.on('signal', data => { //el que tenga el initiator en true lo comienza
       console.log('SIGNAL', JSON.stringify(data))
-      // el escribir va a ser el socket emit(werbrtcSignal o guardar el sdp no mas)
+      // el escribir va a ser el socket emit(webrtcSignal o guardar el sdp no mas)
       let signalpre = JSON.stringify(data);
       let dataSignal = signalpre.slice(0)
       setSdp(dataSignal)
       sdpRef.current = dataSignal
-      console.log('emitiendo webrtcsignal');
+      if (socketRef.current) {
+        console.log('emitiendo webrtcsignal');
+        socketRef.current.emit('webrtcSignal', sdpRef.current)
+      }
       
-      socketRef.current.emit('werbrtcSignal', sdpRef.current)
     })
     
     p.on('connect', () => {
@@ -52,7 +54,7 @@ export const ContextProvider = (props) => {
     setPeer(p)
     peerRef.current = p
   
-  //emitir pee.signal y emitir socket.emit(werbrtcSignal)
+  //emitir pee.signal y emitir socket.emit(webrtcSignal)
   }, [peer,socket,sdp]);
 
   const emitSignal = useCallback(() => {
@@ -103,7 +105,7 @@ export const ContextProvider = (props) => {
                 socket.off("disconnect", onDisconnect);
             }
         };
-    }, [socketRef.current, isSocketConnected]);
+    }, [socket, isSocketConnected]);
 
   return (
     <PeerContext.Provider
