@@ -20,8 +20,11 @@ app.prepare().then(() => {
   io.on("connection", (socket) => {
     console.log('conectado cliente al serverSocketIo');
     
-    socket.on('webrtcSignal',(data)=> onWebrtcSignal(io, data));
-    
+    socket.on('webrtcSignal',(data)=> {
+      console.log('en server webrtcsignal'); 
+      onWebrtcSignal(io, data)
+      }
+    );
   });
 
   httpServer

@@ -6,13 +6,12 @@
 4. [✔] Implementar eventos de servidor en Socket.io.
 5. [O] Implementar la lógica de conexión y eventos en el contexto.
     - [✔] inicializar el socket
-    - [O] emitir los primeros eventos en el socket y servidor
-        ## me dice que socket no existe
-
-
-        - [] el emitirSignal,atomicida, uso de useRef para inmediates y socket.emit prueba
+    - [✔] emitir los primeros eventos en el socket 
+        - [✔] el emitSignal,atomicida, uso de useRef para inmediates y socket.emit prueba
+    - [O] Recibir werbrtcSignal en el server
         - [] socket emit ver si esta enviado el io de server a onwebrtcSignal.js
-    - [O] Implementar socket// peer.on('connect,()={ socket.of('werbrtcSignal')})
+
+    - [] Implementar socket// peer.on('connect,()={ socket.of('werbrtcSignal')})
 6. [ ] Diseñar la interfaz de usuario para interactuar con los eventos de Socket.io.
 7. [ ] Probar la comunicación en tiempo real entre cliente y servidor.
 

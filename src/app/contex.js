@@ -19,32 +19,18 @@ export const ContextProvider = (props) => {
   const sdpRef = useRef(null);
   const socketRef = useRef(null)
 
-  const emitSignal = useCallback(() => {
-      console.log('emitSiganl sdp',sdp);
-      console.log(typeof(peer));
-      console.log(peer);
-      if(!peer){
-         inicializarPeer(true)
-         emitSignal()
-         return
-      }
-      peerRef.current.signal(sdpRef.current)
-
-      //aqui deberia ir pero sdp.current esta vacio, poner el peer en use effect no mas
-  }, [peer,socket,sdp,peerRef,sdpRef,socketRef]);
-
-
+  
+  
   const inicializarPeer = useCallback((initiator) => {
-
+    
     console.log('og');
-    { 
     const p = new Peer({
       initiator,
       trickle: false
     })
     
     p.on('error', err => console.log('error', err))
-    
+      
     p.on('signal', data => { //el que tenga el initiator en true lo comienza
       console.log('SIGNAL', JSON.stringify(data))
       // el escribir va a ser el socket emit(werbrtcSignal o guardar el sdp no mas)
@@ -52,9 +38,11 @@ export const ContextProvider = (props) => {
       let dataSignal = signalpre.slice(0)
       setSdp(dataSignal)
       sdpRef.current = dataSignal
+      console.log('emitiendo webrtcsignal');
+      
+      socketRef.current.emit('werbrtcSignal', sdpRef.current)
     })
     
-    socketRef.current.emit('werbrtcSignal', sdpRef.current)
     p.on('connect', () => {
       console.log('CONNECT')
       p.send('whatever' + Math.random())
@@ -66,10 +54,19 @@ export const ContextProvider = (props) => {
     
     setPeer(p)
     peerRef.current = p
-  }
-    //emitir pee.signal y emitir socket.emit(werbrtcSignal)
-  }, [peer,socket,sdp,peerRef,sdpRef,socketRef]);
+  
+  //emitir pee.signal y emitir socket.emit(werbrtcSignal)
+  }, [peer,socket,sdp]);
 
+const emitSignal = useCallback(() => {
+    if(!peerRef.current){
+       inicializarPeer(true)
+       return
+    }
+    peerRef.current.signal(sdpRef.current)
+
+    //aqui deberia ir pero sdp.current esta vacio, poner el peer en use effect no mas
+}, []);
 
     // initialize socket
     useEffect(() => {
