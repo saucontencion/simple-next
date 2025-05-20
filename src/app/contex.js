@@ -59,9 +59,9 @@ export const ContextProvider = (props) => {
   //emitir pee.signal y emitir socket.emit(webrtcSignal)
   }, [peer,socket,sdp]);
 
-  const emitSignal = useCallback(() => {
+  const emitSignal = useCallback((initiator) => {
       if(!peerRef.current){
-        inicializarPeer(true)
+        inicializarPeer(initiator)
         return
       }
       peerRef.current.signal(sdpRef.current)

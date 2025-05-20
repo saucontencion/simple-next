@@ -14,7 +14,7 @@ export default function Home() {
           <button type="submit">submit</button>
         </form>
       </div>
-      <button onClick={()=>emitSignal()}>other button</button> {/* no pescar que no le puse signatura */}
+      <button onClick={()=>emitSignal(true)}>other button</button> {/* no pescar que no le puse signatura */}
       <pre id="outgoing"></pre>
     </div>
   );

@@ -11,7 +11,12 @@
     - [✔] Recibir werbrtcSignal en el server
         - [✔] socket emit hasta onwebrtcSignal.js
         - [O] emitir al par un mensaje
-            -[O] Crear la escucha de webrtcSignal en el socket
+            -[O] initilizeSocket: 
+                -[✔] agregar parametro true o false a emitirsignal
+                -[] Crear la escucha de webrtcSignal (ON Y OFF LISTO)
+                -[] Evaluar: // Handle incoming WebRTC signals 
+                -[] debo   colocar lo de particcipantes para rederigir
+            -[] onwebrtcSignal: implementar lo de sock para manejo de dataSignal
             -[]crear el objeto dataSignal, con data, participantes, initiator
             -[] manejar el dataSignal en on webrtcSginal
             -[] probar recepcion
