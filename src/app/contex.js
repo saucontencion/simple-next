@@ -43,7 +43,9 @@ export const ContextProvider = (props) => {
     })
     
     p.on('connect', () => {
-      console.log('CONNECT')
+      console.log('CONNECT'
+        //aqui el of peer onwebrtcsignal
+      )
       p.send('whatever' + Math.random())
     })
     

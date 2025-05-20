@@ -9,8 +9,12 @@
     - [✔] emitir los primeros eventos en el socket 
         - [✔] el emitSignal,atomicida, uso de useRef para inmediates y socket.emit prueba
     - [✔] Recibir werbrtcSignal en el server
-        - [✔] socket emit ver si esta enviado el io de server a onwebrtcSignal.js
-        - [O] emitir al paar un mensaje
+        - [✔] socket emit hasta onwebrtcSignal.js
+        - [O] emitir al par un mensaje
+            -[O] Crear la escucha de webrtcSignal en el socket
+            -[]crear el objeto dataSignal, con data, participantes, initiator
+            -[] manejar el dataSignal en on webrtcSginal
+            -[] probar recepcion
     - [] Implementar socket// peer.on('connect,()={ socket.of('werbrtcSignal')})
 6. [ ] Diseñar la interfaz de usuario para interactuar con los eventos de Socket.io.
 7. [ ] Probar la comunicación en tiempo real entre cliente y servidor.
