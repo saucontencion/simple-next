@@ -72,7 +72,7 @@ export const ContextProvider = (props) => {
     // initialize socket
     useEffect(() => {
         const initializeSocket = async () => {
-            const socketInstance = await io();
+            const socketInstance = io();
             setSocket(socketInstance);
             socketRef.current=socketInstance
         };
@@ -99,15 +99,41 @@ export const ContextProvider = (props) => {
         if (socket) {
             socket.on("connect", onConnect);
             socket.on("disconnect", onDisconnect);
-        }
-
-        return () => {
+          }
+          
+          return () => {
             if (socket) {
-                socket.off("connect", onConnect);
-                socket.off("disconnect", onDisconnect);
+              socket.off("connect", onConnect);
+              socket.off("disconnect", onDisconnect);
             }
         };
     }, [socket, isSocketConnected]);
+
+    // Handle incoming WebRTC signals
+    useEffect(() => {
+      console.log('se activo handle incoming');
+      
+      if (socket && isSocketConnected) {
+        socket.on('webrtcSignal', (incomingSignal) => {
+          console.log('Received WebRTC signal', incomingSignal);
+          sdpRef.current = incomingSignal;
+          
+          if (!peerRef.current) {
+            log( 'en el useeffect peerref no existe', peerRef.current)
+            // If we don't have a peer yet, create one as non-initiator
+            inicializarPeer(false);
+          } else {
+            // Otherwise signal the existing peer
+            peerRef.current.signal(incomingSignal);
+          }
+        });
+        
+        return () => {
+          socket.off('webrtcSignal');
+        };
+      }
+    }, [socket, isSocketConnected, inicializarPeer]);
+
 
   return (
     <PeerContext.Provider

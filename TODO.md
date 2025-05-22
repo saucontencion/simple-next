@@ -13,9 +13,10 @@
         - [O] emitir al par un mensaje
             -[O] initilizeSocket: 
                 -[✔] agregar parametro true o false a emitirsignal
-                -[] Crear la escucha de webrtcSignal (ON Y OFF LISTO)
-                -[] Evaluar: // Handle incoming WebRTC signals 
-                -[] debo   colocar lo de particcipantes para rederigir
+                -[✔] Crear usseffect escucha de webrtcSignal (ON Y OFF LISTO)
+                    -[✔] Evaluar: // Handle incoming WebRTC signals 
+                -[o] Emit webrtcSignal desde server
+                -[] debo   colocar lo de participantes para rederigir
             -[] onwebrtcSignal: implementar lo de sock para manejo de dataSignal
             -[]crear el objeto dataSignal, con data, participantes, initiator
             -[] manejar el dataSignal en on webrtcSginal

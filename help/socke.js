@@ -34,7 +34,7 @@ export const ContextProvider = (props) => {
       // Only emit the signal if socket is connected
       if (socketRef.current) {
         console.log('Emitting WebRTC signal');
-        socketRef.current.emit('werbrtcSignal', signalData);
+        socketRef.current.emit('webrtcSignal', signalData);
       }
     });
     
@@ -74,7 +74,7 @@ export const ContextProvider = (props) => {
   // Handle incoming WebRTC signals
   useEffect(() => {
     if (socket && isSocketConnected) {
-      socket.on('werbrtcSignal', (incomingSignal) => {
+      socket.on('webrtcSignal', (incomingSignal) => {
         console.log('Received WebRTC signal', incomingSignal);
         sdpRef.current = incomingSignal;
         
@@ -89,7 +89,7 @@ export const ContextProvider = (props) => {
       });
       
       return () => {
-        socket.off('werbrtcSignal');
+        socket.off('webrtcSignal');
       };
     }
   }, [socket, isSocketConnected, inicializarPeer]);
