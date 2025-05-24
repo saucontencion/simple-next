@@ -17,7 +17,17 @@ export const ContextProvider = (props) => {
   const peerRef = useRef(null);
   const sdpRef = useRef(null);
   const socketRef = useRef(null)
-  
+  const participantesRef= useRef(null)
+  const initiatorRef = useRef(false)
+
+  /*export type ConnectionData = {
+    sdp:SignalData,
+    enLaLLamada:participants,
+    isCaller:boolean
+    
+}  hare participantes y sdp*/
+ // 2 uno participantes, 2 initiator por defecto en false
+
   const inicializarPeer = useCallback((initiator) => {
     
     console.log('og');
@@ -37,15 +47,23 @@ export const ContextProvider = (props) => {
       sdpRef.current = dataSignal
       if (socketRef.current) {
         console.log('emitiendo webrtcsignal');
-        socketRef.current.emit('webrtcSignal', sdpRef.current)
-      }
-      
+        const data = {
+          sdp: sdpRef.current,
+          participants: initiatorRef
+            ? { caller: socketRef.current.id }
+            : { receiver: socket.current.id }
+        };
+        socketRef.current.emit('webrtcSignal', data);
+      }  
     })
     
     p.on('connect', () => {
       console.log('CONNECT'
         //aqui el of peer onwebrtcsignal
       )
+      console.log('se desactivara la escucha de socket webrtc');
+      
+      socket.off('webrtcSignal')
       p.send('whatever' + Math.random())
     })
     
@@ -61,6 +79,7 @@ export const ContextProvider = (props) => {
 
   const emitSignal = useCallback((initiator) => {
       if(!peerRef.current){
+        initiatorRef.current= initiator
         inicializarPeer(initiator)
         return
       }
@@ -119,11 +138,9 @@ export const ContextProvider = (props) => {
           sdpRef.current = incomingSignal;
           
           if (!peerRef.current) {
-            log( 'en el useeffect peerref no existe', peerRef.current)
-            // If we don't have a peer yet, create one as non-initiator
+            log( 'en el useeffect peerref no existe', peerRef.current)// If we don't have a peer yet, create one as non-initiator
             inicializarPeer(false);
-          } else {
-            // Otherwise signal the existing peer
+          } else { // Otherwise signal the existing peer
             peerRef.current.signal(incomingSignal);
           }
         });
@@ -132,7 +149,7 @@ export const ContextProvider = (props) => {
           socket.off('webrtcSignal');
         };
       }
-    }, [socket, isSocketConnected, inicializarPeer]);
+    }, [socket, isSocketConnected]);
 
 
   return (
