@@ -12,21 +12,13 @@ export const ContextProvider = (props) => {
 
   const [socket, setSocket] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-  const [sdp,setSdp]= useState(null)
+  const [sdp, setSdp]= useState(null);
 
   const peerRef = useRef(null);
   const sdpRef = useRef(null);
-  const socketRef = useRef(null)
-  const participantesRef= useRef(null)
-  const initiatorRef = useRef(false)
-
-  /*export type ConnectionData = {
-    sdp:SignalData,
-    enLaLLamada:participants,
-    isCaller:boolean
-    
-}  hare participantes y sdp*/
- // 2 uno participantes, 2 initiator por defecto en false
+  const socketRef = useRef(null);
+  const participantesRef= useRef(null);
+  const initiatorRef = useRef(false);
 
   const inicializarPeer = useCallback((initiator) => {
     
@@ -92,8 +84,10 @@ export const ContextProvider = (props) => {
     useEffect(() => {
         const initializeSocket = async () => {
             const socketInstance = io();
-            setSocket(socketInstance);
+            console.log('seteando socket' ,socketInstance);
+            
             socketRef.current=socketInstance
+            setSocket(socketInstance);
         };
 
         if (!socketRef.current) {
@@ -135,13 +129,16 @@ export const ContextProvider = (props) => {
       if (socket && isSocketConnected) {
         socket.on('webrtcSignal', (incomingSignal) => {
           console.log('Received WebRTC signal', incomingSignal);
-          sdpRef.current = incomingSignal;
+          sdpRef.current = incomingSignal.sdp;
           
           if (!peerRef.current) {
-            log( 'en el useeffect peerref no existe', peerRef.current)// If we don't have a peer yet, create one as non-initiator
+            console.log( 'en el useeffect peerref no existe', peerRef.current)// If we don't have a peer yet, create one as non-initiator
             inicializarPeer(false);
+            setTimeout(() => {
+                    peerRef.current.signal(incomingSignal.sdp);  
+            }, 1000);
           } else { // Otherwise signal the existing peer
-            peerRef.current.signal(incomingSignal);
+            peerRef.current.signal(incomingSignal.sdp);
           }
         });
         

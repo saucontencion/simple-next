@@ -23,7 +23,7 @@ app.prepare().then(() => {
     socket.on('webrtcSignal',(data)=> {
       console.log('en server webrtcsignal'); 
       onWebrtcSignal(io, data)
-      setTimeout(()=> socket.emit('webrtcSignal','datos data'),2000)
+      setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),2000)
       }
     );
   });
