@@ -54,8 +54,9 @@ export const ContextProvider = (props) => {
         //aqui el of peer onwebrtcsignal
       )
       console.log('se desactivara la escucha de socket webrtc');
-      
-      socket.off('webrtcSignal')
+      if (socket) {
+        socket.off('webrtcSignal')
+      }
       p.send('whatever' + Math.random())
     })
     
@@ -108,11 +109,17 @@ export const ContextProvider = (props) => {
             setIsSocketConnected(false);
             console.log("DISCONNECTED");
         };
-
+        
         if (socket) {
-            socket.on("connect", onConnect);
-            socket.on("disconnect", onDisconnect);
-          }
+          socket.on("connect", onConnect);
+          socket.on("disconnect", onDisconnect);
+        }
+        if (socketRef.current.connected) {
+          console.log("⚡ Chrome: conexión síncrona detectada");
+          socketRef.current.on("connectE", onConnect());
+            // Emitir el evento manualmente o llamar la función directamente
+            socketRef.current.emit("connectE"); // Forzar el evento
+        }
           
           return () => {
             if (socket) {
