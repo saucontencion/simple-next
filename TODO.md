@@ -16,7 +16,8 @@
                 - [✔] Crear usseffect escucha de webrtcSignal (ON Y OFF LISTO)
                     - [✔] Evaluar: // Handle incoming WebRTC signals 
                 - [o] Emit webrtcSignal desde server events
-                    - [O] debo   colocar lo de participantes para rederigir
+                    - [O] Colocar lo de participantes para rederigir
+                        - [O] caller y reciver se esten guardando correctamente
             -[] onwebrtcSignal: implementar lo de sock para manejo de dataSignal
             -[]crear el objeto dataSignal, con data, participantes, initiator
             -[] manejar el dataSignal en on webrtcSginal

@@ -23,40 +23,36 @@ export const ContextProvider = (props) => {
   const inicializarPeer = useCallback((initiator) => {
     
     console.log('og');
-    const p = new Peer({
-      initiator,
-      trickle: false
-    })
+    const p = new Peer({initiator,trickle: false})
     
     p.on('error', err => console.log('error', err))
       
-    p.on('signal', data => { //el que tenga el initiator en true lo comienza
+    p.on('signal', data => { 
       console.log('SIGNAL', JSON.stringify(data))
-      // el escribir va a ser el socket emit(webrtcSignal o guardar el sdp no mas)
       let signalpre = JSON.stringify(data);
       let dataSignal = signalpre.slice(0)
+      let extracParticipants = initiator
+            ? { receiver: socketRef.current.id }
+            : { caller: socketRef.current.id };
       setSdp(dataSignal)
-      sdpRef.current = dataSignal
+      sdpRef.current = dataSignal;
       if (socketRef.current) {
         console.log('emitiendo webrtcsignal');
         const data = {
           sdp: sdpRef.current,
-          participants: initiatorRef
-            ? { caller: socketRef.current.id }
-            : { receiver: socket.current.id }
-        };
+          participants: {
+            ...participantesRef.current,
+            ...extracParticipants
+          }
+  };
         socketRef.current.emit('webrtcSignal', data);
       }  
     })
     
     p.on('connect', () => {
-      console.log('CONNECT'
-        //aqui el of peer onwebrtcsignal
-      )
+      console.log('CONNECT')
       console.log('se desactivara la escucha de socket webrtc');
-      if (socket) {
-        socket.off('webrtcSignal')
-      }
+      if (socket) {socket.off('webrtcSignal')}
       p.send('whatever' + Math.random())
     })
     
@@ -77,8 +73,6 @@ export const ContextProvider = (props) => {
         return
       }
       peerRef.current.signal(sdpRef.current)
-
-      //aqui deberia ir pero sdp.current esta vacio, poner el peer en use effect no mas
   }, []);
 
     // initialize socket
@@ -137,7 +131,7 @@ export const ContextProvider = (props) => {
         socket.on('webrtcSignal', (incomingSignal) => {
           console.log('Received WebRTC signal', incomingSignal);
           sdpRef.current = incomingSignal.sdp;
-          
+          participantesRef.current= incomingSignal.participants
           if (!peerRef.current) {
             console.log( 'en el useeffect peerref no existe', peerRef.current)// If we don't have a peer yet, create one as non-initiator
             inicializarPeer(false);
