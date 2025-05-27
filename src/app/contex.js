@@ -13,6 +13,7 @@ export const ContextProvider = (props) => {
   const [socket, setSocket] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [sdp, setSdp]= useState(null);
+  const [onlineUsers,setOnlineUsers]= useState(null);
 
   const peerRef = useRef(null);
   const sdpRef = useRef(null);
@@ -62,9 +63,7 @@ export const ContextProvider = (props) => {
     
     setPeer(p)
     peerRef.current = p
-  
-  //emitir pee.signal y emitir socket.emit(webrtcSignal)
-  }, [peer,socket,sdp]);
+    }, [peer,socket,sdp]);
 
   const emitSignal = useCallback((initiator) => {
       if(!peerRef.current){
@@ -149,6 +148,28 @@ export const ContextProvider = (props) => {
       }
     }, [socket, isSocketConnected]);
 
+    //set onlineUsers
+      useEffect(() => {
+      if (!socket || !isSocketConnected ) return;
+      socket.emit('addNewUser', socketRef.current.id, isSocketConnected);
+      socket.on('getUsers', (res) => {
+          console.log('Res de getUsers:', res);
+          setOnlineUsers(res);
+      });
+
+      return () => {
+          socket.off('getUsers');
+      };
+  }, [socket, isSocketConnected]);
+
+    // Handle Call
+    useEffect(()=>{
+      if (socket && isSocketConnected) {
+        socket.on('call',()=>{
+
+        })
+      }
+    },[socket, isSocketConnected])
 
   return (
     <PeerContext.Provider

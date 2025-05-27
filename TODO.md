@@ -18,6 +18,12 @@
                 - [o] Emit webrtcSignal desde server events
                     - [O] Colocar lo de participantes para rederigir
                         - [O] caller y reciver se esten guardando correctamente
+6. -[O] list user y call
+    -[✔] crear la lista de usuarios en el servidor y emitirla
+    -[✔] //set onlineUsers, recibir la lista de usuarios,
+    -[O] ver quien llama y quien recibe
+            
+            
             -[] onwebrtcSignal: implementar lo de sock para manejo de dataSignal
             -[]crear el objeto dataSignal, con data, participantes, initiator
             -[] manejar el dataSignal en on webrtcSginal

@@ -16,10 +16,21 @@ app.prepare().then(() => {
 //anclar el socket al httpServer
   let ServerSocketIo = Server
   let io = new ServerSocketIo(httpServer);
+  let onlineUsers = []
 
   io.on("connection", (socket) => {
     console.log('conectado cliente al serverSocketIo');
     
+    socket.on('addNewUser',(socketId,isSocketConnected)=>{      
+      socketId && !onlineUsers.some(user => user == socketId.id) &&isSocketConnected&& onlineUsers.push({
+        socketId})      
+      if (!isSocketConnected) {
+        onlineUsers = onlineUsers.filter(user => user.socketId !== socket.id)
+        console.log('dentro del if addnew user !iscocket ');
+        
+      }
+      io.emit('getUsers',onlineUsers)
+    })
     socket.on('webrtcSignal',(data)=> {
       console.log('en server webrtcsignal'); 
       onWebrtcSignal(io, data)
