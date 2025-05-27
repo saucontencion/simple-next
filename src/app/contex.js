@@ -14,7 +14,7 @@ export const ContextProvider = (props) => {
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [sdp, setSdp]= useState(null);
   const [onlineUsers,setOnlineUsers]= useState(null);
-
+  const [peerOnData, setPeerOnData] = useState([])
   const peerRef = useRef(null);
   const sdpRef = useRef(null);
   const socketRef = useRef(null);
@@ -59,6 +59,7 @@ export const ContextProvider = (props) => {
     
     p.on('data', data => {
       console.log('data: ' + data)
+      setPeerOnData(prev => [...prev, { sender: 'remote', text: data.toString() }]);
     })
     
     setPeer(p)
@@ -73,6 +74,12 @@ export const ContextProvider = (props) => {
       }
       peerRef.current.signal(sdpRef.current)
   }, []);
+
+    //emit p.data
+    const emitPData =useCallback((mensaje)=>{
+      peerRef.current.send(mensaje);
+      setPeerOnData(prev => [...prev, { sender: 'yo', text: mensaje }]);
+    },[])
 
     // initialize socket
     useEffect(() => {
@@ -176,7 +183,9 @@ export const ContextProvider = (props) => {
         value={{
             peer,
             socket,
+            peerOnData,
             emitSignal,
+            emitPData,
         }}
         {...props}
     />
