@@ -38,7 +38,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 15px; /* Espaciado entre los elementos del formulario */
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #ffffff; /* Fondo blanco para el formulario */

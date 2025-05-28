@@ -15,17 +15,21 @@
                 - [✔] agregar parametro true o false a emitirsignal
                 - [✔] Crear usseffect escucha de webrtcSignal (ON Y OFF LISTO)
                     - [✔] Evaluar: // Handle incoming WebRTC signals 
-        - [o] Emit webrtcSignal desde server events
+        - [✔] Emit webrtcSignal desde server events
             - [O] Colocar lo de participantes para rederigir
                 - [O] caller y reciver se esten guardando correctamente
 6. -[O] list user y call
     -[✔] crear la lista de usuarios en el servidor y emitirla
     -[✔] //set onlineUsers, recibir la lista de usuarios,
-    -[] Crear el elemento lista de ususario con onlineusers 
-        -[] se llama a handle call con onlineUse
-        -[O] crear el handle call y socket.emit('call, participants)
-        -[] server events onCall emit incommingCall
-    -[] ver quien llama y quien recibe
+    -[✔] Crear el elemento lista de ususario con onlineusers 
+        -[✔] se llama a handle call con onlineUse
+        -[✔] crear el handle call y socket.emit('call, participants)
+        -[O] server events onCall emit incommingCall
+    - [] crear la notificacion , la notificacion llama a handleJoinCall, la cual ejecuta socket.emit('answerCall', {from:user})
+    -[] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal) -->
+
+
+    -[] hay tendria a quien se esta llamando y ejecutar todo como esta hasta ahora 
 // yo hacer todo el show de de lista usuarios, llamada,notificacion,contestacion         
             
             -[] onwebrtcSignal: implementar lo de sock para manejo de dataSignal

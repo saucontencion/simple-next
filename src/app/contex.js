@@ -14,12 +14,14 @@ export const ContextProvider = (props) => {
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   const [sdp, setSdp]= useState(null);
   const [onlineUsers,setOnlineUsers]= useState(null);
-  const [peerOnData, setPeerOnData] = useState([])
+  const [peerOnData, setPeerOnData] = useState([]);
+  const [calledEnd,setCalledEnd] =useState(true)
   const peerRef = useRef(null);
   const sdpRef = useRef(null);
   const socketRef = useRef(null);
   const participantesRef= useRef(null);
   const initiatorRef = useRef(false);
+  const setongoingCallRef= useRef(null)
 
   const inicializarPeer = useCallback((initiator) => {
     
@@ -81,7 +83,18 @@ export const ContextProvider = (props) => {
       setPeerOnData(prev => [...prev, { sender: 'yo', text: mensaje }]);
     },[])
     //onlineUser contendra sokcetId
-    const handleCall = useCallback((onlineUser)=>{},[])
+    const handleCall = useCallback((onlineUser)=>{
+        setCalledEnd(false)
+        console.log('ejecutandose handleCall');
+        
+        if (!socketRef.current) return;
+    
+        console.log('socket existiendo en handle call');
+      
+        const participants = { caller: socketRef.current.id, reciver: onlineUser.socketId };
+        setongoingCallRef.current={ participants};
+        socketRef.current?.emit('call', participants);
+    },[])
 
     // initialize socket
     useEffect(() => {
