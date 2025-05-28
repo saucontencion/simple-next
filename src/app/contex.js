@@ -23,8 +23,6 @@ export const ContextProvider = (props) => {
   const initiatorRef = useRef(false);
   const setongoingCallRef= useRef(null)
 
-  const isRingingRef=(false)
-
   const inicializarPeer = useCallback((initiator) => {
     
     console.log('og');
@@ -94,14 +92,13 @@ export const ContextProvider = (props) => {
         console.log('socket existiendo en handle call');
       
         const participants = { caller: socketRef.current.id, reciver: onlineUser.socketId };
-        setongoingCallRef.current={ participants};
-        isRingingRef.current= false
+        setongoingCallRef.current={ participants, isRinging: false }
         socketRef.current?.emit('call', participants);
     },[])
 
     const onInComingCall = useCallback((participants)=>{
-        setongoingCallRef.current=participants
-        isRingingRef.current= true
+        setongoingCallRef.current={ participants, isRinging: true }
+
     },[])
 
     // initialize socket
@@ -207,13 +204,13 @@ export const ContextProvider = (props) => {
         if (!socket || !isSocketConnected) return;
 
         socket.on('incommingCall', onInComingCall);   
-        socket.on('hangup', handleHungup);
+        socket.on('hangup', /* handleHungup */);
         
         return () => {
             socket.off('incommingCall', onInComingCall);
-            socket.off('hangup', handleHungup);
+            socket.off('hangup', /* handleHungup */);
         }
-    }, [socket, isSocketConnected, onInComingCall, completePeerConnection, handleHungup]);
+    }, [socket, isSocketConnected, onInComingCall, /* completePeerConnection */ /* handleHungup */]);
 
     useEffect(() => {
         let timeout;
@@ -240,6 +237,7 @@ export const ContextProvider = (props) => {
             emitSignal,
             emitPData,
             handleCall,
+            onInComingCall,
         }}
         {...props}
     />
