@@ -10,19 +10,23 @@
         - [✔] el emitSignal,atomicida, uso de useRef para inmediates y socket.emit prueba
     - [✔] Recibir werbrtcSignal en el server
         - [✔] socket emit hasta onwebrtcSignal.js
-        - [O] emitir al par un mensaje
-            - [O] initilizeSocket: 
+        - [✔] emitir al par un mensaje
+            - [✔] initilizeSocket: 
                 - [✔] agregar parametro true o false a emitirsignal
                 - [✔] Crear usseffect escucha de webrtcSignal (ON Y OFF LISTO)
                     - [✔] Evaluar: // Handle incoming WebRTC signals 
-                - [o] Emit webrtcSignal desde server events
-                    - [O] Colocar lo de participantes para rederigir
-                        - [O] caller y reciver se esten guardando correctamente
+        - [o] Emit webrtcSignal desde server events
+            - [O] Colocar lo de participantes para rederigir
+                - [O] caller y reciver se esten guardando correctamente
 6. -[O] list user y call
     -[✔] crear la lista de usuarios en el servidor y emitirla
     -[✔] //set onlineUsers, recibir la lista de usuarios,
-    -[O] ver quien llama y quien recibe
-            
+    -[] Crear el elemento lista de ususario con onlineusers 
+        -[] se llama a handle call con onlineUse
+        -[O] crear el handle call y socket.emit('call, participants)
+        -[] server events onCall emit incommingCall
+    -[] ver quien llama y quien recibe
+// yo hacer todo el show de de lista usuarios, llamada,notificacion,contestacion         
             
             -[] onwebrtcSignal: implementar lo de sock para manejo de dataSignal
             -[]crear el objeto dataSignal, con data, participantes, initiator

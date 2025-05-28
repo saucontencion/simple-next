@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "@/providers/SocketProviders";
 import Chat from '../ui/components/chat';
+import ListOnlineUsers from '../ui/components/listOnlineUsers'
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,7 +30,8 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
           {children}
-          <Chat/> 
+          <ListOnlineUsers/> 
+          <Chat/>
         </Provider>
       </body>
     </html>

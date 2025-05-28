@@ -37,6 +37,12 @@ app.prepare().then(() => {
       setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),2000)
       }
     );
+    socket.on('disconnect',()=>{
+      console.log('socketid disconect' ,socket.id);
+   
+      onlineUsers = onlineUsers.filter(user => user.socketId !== socket.id)
+      io.emit('getUsers',onlineUsers)
+    })
   });
 
   httpServer

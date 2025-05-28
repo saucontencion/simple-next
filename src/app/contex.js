@@ -73,13 +73,15 @@ export const ContextProvider = (props) => {
         return
       }
       peerRef.current.signal(sdpRef.current)
-  }, []);
+    }, []);
 
     //emit p.data
     const emitPData =useCallback((mensaje)=>{
       peerRef.current.send(mensaje);
       setPeerOnData(prev => [...prev, { sender: 'yo', text: mensaje }]);
     },[])
+    //onlineUser contendra sokcetId
+    const handleCall = useCallback((onlineUser)=>{},[])
 
     // initialize socket
     useEffect(() => {
@@ -160,11 +162,12 @@ export const ContextProvider = (props) => {
       if (!socket || !isSocketConnected ) return;
       socket.emit('addNewUser', socketRef.current.id, isSocketConnected);
       socket.on('getUsers', (res) => {
-          console.log('Res de getUsers:', res);
+          console.log('Res de getUsers: que sera Online users', res);
           setOnlineUsers(res);
       });
 
       return () => {
+          setOnlineUsers(null)
           socket.off('getUsers');
       };
   }, [socket, isSocketConnected]);
@@ -184,8 +187,10 @@ export const ContextProvider = (props) => {
             peer,
             socket,
             peerOnData,
+            onlineUsers,
             emitSignal,
             emitPData,
+            handleCall,
         }}
         {...props}
     />
