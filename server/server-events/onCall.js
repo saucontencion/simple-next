@@ -1,10 +1,10 @@
 const onCall = async (io,participants)=>{
    console.log('dentro server Oncall',participants) 
-/*     if(participants.reciver.socketId ){
-        console.log(participants.caller.socketId);
-        console.log(participants.reciver.socketId);
+/*     if(participants.caller ){
+        console.log(participants.caller);
+        console.log(participants.reciver);
         
-        io.to(participants.reciver.socketId).emit('incommingCall',participants)
+        io.to(participants.caller).emit('incommingCall',participants)
     } */
 }
 export default onCall

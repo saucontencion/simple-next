@@ -26,7 +26,7 @@
         -[✔] crear el handle call y socket.emit('call, participants)
         -[O] server events onCall emit incommingCall
     - [] crear la notificacion , la notificacion llama a handleJoinCall, la cual ejecuta socket.emit('answerCall', {from:user})
-    -[] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal) -->
+    -[] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal ) -->
 
 
     -[] hay tendria a quien se esta llamando y ejecutar todo como esta hasta ahora 
