@@ -24,8 +24,11 @@
     -[✔] Crear el elemento lista de ususario con onlineusers 
         -[✔] se llama a handle call con onlineUse
         -[✔] crear el handle call y socket.emit('call, participants)
-        -[O] server events onCall emit incommingCall
-    - [] crear la notificacion , la notificacion llama a handleJoinCall, la cual ejecuta socket.emit('answerCall', {from:user})
+        -[✔] server events onCall emit incommingCall
+        -[✔] crear la notificacion 
+            -[✔] la notificacion llama a handleJoinCall,
+        -[O] crear handleJoinCall
+     la cual ejecuta socket.emit('answerCall', {from:user})
     -[] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal ) -->
 
 

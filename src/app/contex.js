@@ -16,6 +16,7 @@ export const ContextProvider = (props) => {
   const [onlineUsers,setOnlineUsers]= useState(null);
   const [peerOnData, setPeerOnData] = useState([]);
   const [calledEnd,setCalledEnd] =useState(true)
+  const [ongoingCall,setongoingCall]=useState(null)
   const peerRef = useRef(null);
   const sdpRef = useRef(null);
   const socketRef = useRef(null);
@@ -98,7 +99,12 @@ export const ContextProvider = (props) => {
 
     const onInComingCall = useCallback((participants)=>{
         setongoingCallRef.current={ participants, isRinging: true }
-
+        setongoingCall({ participants, isRinging: true })
+        console.log('se ejecuto onincomingCall con participants en el socket', participants);
+    },[ongoingCall])
+    const handleJoinCall =useCallback((ongoingCall)=>{
+      console.log('handleJoinCall de socket, recibe ongoincall', ongoingCall);
+      
     },[])
 
     // initialize socket
@@ -234,10 +240,13 @@ export const ContextProvider = (props) => {
             socket,
             peerOnData,
             onlineUsers,
+            setongoingCallRef,
+            ongoingCall,
             emitSignal,
             emitPData,
             handleCall,
             onInComingCall,
+            handleJoinCall,
         }}
         {...props}
     />

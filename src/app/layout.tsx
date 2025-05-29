@@ -4,6 +4,7 @@ import "./globals.css";
 import Provider from "@/providers/SocketProviders";
 import Chat from '../ui/components/chat';
 import ListOnlineUsers from '../ui/components/listOnlineUsers'
+import CallNotification from '../ui/components/CallNotification'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Provider>
           {children}
+          <CallNotification/>
           <ListOnlineUsers/> 
           <Chat/>
         </Provider>
