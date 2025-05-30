@@ -23,6 +23,7 @@ export const ContextProvider = (props) => {
   const participantesRef= useRef(null);
   const initiatorRef = useRef(false);
   const setongoingCallRef= useRef(null)
+  const isCallerRef =useRef(false)
 
   const inicializarPeer = useCallback((initiator) => {
     
@@ -44,10 +45,11 @@ export const ContextProvider = (props) => {
         console.log('emitiendo webrtcsignal');
         const data = {
           sdp: sdpRef.current,
-          participants: {
+          ongoingCall: {...setongoingCallRef.current,isCaller:isCallerRef}
+/*           participants: {
             ...participantesRef.current,
             ...extracParticipants
-          }
+          } */
   };
         socketRef.current.emit('webrtcSignal', data);
       }  
@@ -95,8 +97,7 @@ export const ContextProvider = (props) => {
         const participants = { caller: socketRef.current.id, reciver: onlineUser.socketId };
         setongoingCallRef.current={ participants, isRinging: false }
         socketRef.current?.emit('call', participants);
-    },[])
-
+    },[]);
     const onInComingCall = useCallback((participants)=>{
         setongoingCallRef.current={ participants, isRinging: true }
         setongoingCall({ participants, isRinging: true })
@@ -104,7 +105,13 @@ export const ContextProvider = (props) => {
     },[ongoingCall])
     const handleJoinCall =useCallback((ongoingCall)=>{
       console.log('handleJoinCall de socket, recibe ongoincall', ongoingCall);
-      
+      socketRef.current.emit('answerCall', ongoingCall)// recive, y ahora emit a caller      
+    },[])
+    const onAnswerCall =useCallback((ongoingCall)=>{
+      console.log('onAnswerCall de socket, recibe ongoincall', ongoingCall);
+      isCallerRef.current=true
+      setongoingCallRef.current= {...ongoingCall,isCaller:isCallerRef}
+      emitSignal(true)
     },[])
 
     // initialize socket
@@ -209,14 +216,16 @@ export const ContextProvider = (props) => {
     useEffect(() => {
         if (!socket || !isSocketConnected) return;
 
-        socket.on('incommingCall', onInComingCall);   
-        socket.on('hangup', /* handleHungup */);
+        socket.on('incommingCall', onInComingCall);
+        socket.on('answerCall',onAnswerCall);   
+        /* socket.on('hangup', handleHungup ); */
         
         return () => {
-            socket.off('incommingCall', onInComingCall);
-            socket.off('hangup', /* handleHungup */);
+          socket.off('incommingCall', onInComingCall);
+          socket.off('answerCall',onAnswerCall);   
+            /* socket.off('hangup', handleHungup ); */
         }
-    }, [socket, isSocketConnected, onInComingCall, /* completePeerConnection */ /* handleHungup */]);
+    }, [socket, isSocketConnected, /* completePeerConnection */ /* handleHungup */]);
 
     useEffect(() => {
         let timeout;

@@ -27,10 +27,11 @@
         -[✔] server events onCall emit incommingCall
         -[✔] crear la notificacion 
             -[✔] la notificacion llama a handleJoinCall,
-        -[O] crear handleJoinCall
-     la cual ejecuta socket.emit('answerCall', {from:user})
-    -[] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal ) -->
-
+        -[✔] crear handleJoinCall
+            -[✔]la cual ejecuta socket.emit('answerCall', ongoincall)
+        -[✔] server events, answercall
+    -[O] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal ) -->
+    -[]  ver si es caller o reciver
 
     -[] hay tendria a quien se esta llamando y ejecutar todo como esta hasta ahora 
 // yo hacer todo el show de de lista usuarios, llamada,notificacion,contestacion         
