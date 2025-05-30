@@ -4,7 +4,7 @@ import { Server } from "socket.io";
 
 import onWebrtcSignal from "./server-events/onWebrtcSignal.js";
 import onCall from "./server-events/onCall.js";
-import answerCall from "./server-events/onCall.js";
+import answerCall from "./server-events/answerCall.js";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -41,9 +41,9 @@ app.prepare().then(() => {
     })
     socket.on('webrtcSignal',(data)=> {
       console.log('en server webrtcsignal'); 
-      onWebrtcSignal(io, data)
-      setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),1000)
-/*       setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),2000)
+      onWebrtcSignal(io,socket, data)
+/*       setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),1000)
+ *//*       setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),2000)
  */      }
     );
     socket.on('call',(participants) => {

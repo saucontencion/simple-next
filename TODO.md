@@ -30,9 +30,11 @@
         -[✔] crear handleJoinCall
             -[✔]la cual ejecuta socket.emit('answerCall', ongoincall)
         -[✔] server events, answercall
-    -[O] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal ) -->
-    -[]  ver si es caller o reciver
+    -[✔] socket on('answerCall',()=> emit signal(true)) <!-- despues la maneja socket.on('webrtcSignal ) -->
+    -[✔]  ver si es caller o reciver
 
+7. -[O] modificar el socket.on webrtc para que emita a quien corresponda
+    <!-- que es lo que hace que desaparesca la notificacion para que desaparesca -->
     -[] hay tendria a quien se esta llamando y ejecutar todo como esta hasta ahora 
 // yo hacer todo el show de de lista usuarios, llamada,notificacion,contestacion         
             

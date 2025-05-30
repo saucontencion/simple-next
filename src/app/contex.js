@@ -46,18 +46,13 @@ export const ContextProvider = (props) => {
         const data = {
           sdp: sdpRef.current,
           ongoingCall: {...setongoingCallRef.current,isCaller:isCallerRef}
-/*           participants: {
-            ...participantesRef.current,
-            ...extracParticipants
-          } */
-  };
+        };
         socketRef.current.emit('webrtcSignal', data);
       }  
     })
     
     p.on('connect', () => {
-      console.log('CONNECT')
-      console.log('se desactivara la escucha de socket webrtc');
+      console.log('Peer CONNECT,se desactivara la escucha de socket webrtc');
       if (socket) {socket.off('webrtcSignal')}
       p.send('whatever' + Math.random())
     })
@@ -87,13 +82,8 @@ export const ContextProvider = (props) => {
     },[])
     //onlineUser contendra sokcetId
     const handleCall = useCallback((onlineUser)=>{
-        setCalledEnd(false)
-        console.log('ejecutandose handleCall');
-        
-        if (!socketRef.current) return;
-    
-        console.log('socket existiendo en handle call');
-      
+        setCalledEnd(false)        
+        if (!socketRef.current) return;      
         const participants = { caller: socketRef.current.id, reciver: onlineUser.socketId };
         setongoingCallRef.current={ participants, isRinging: false }
         socketRef.current?.emit('call', participants);
@@ -101,14 +91,13 @@ export const ContextProvider = (props) => {
     const onInComingCall = useCallback((participants)=>{
         setongoingCallRef.current={ participants, isRinging: true }
         setongoingCall({ participants, isRinging: true })
-        console.log('se ejecuto onincomingCall con participants en el socket', participants);
     },[ongoingCall])
     const handleJoinCall =useCallback((ongoingCall)=>{
-      console.log('handleJoinCall de socket, recibe ongoincall', ongoingCall);
+      setongoingCallRef.current={ ...ongoingCall, isRinging: false }
+      setongoingCall({ ...ongoingCall, isRinging: true })
       socketRef.current.emit('answerCall', ongoingCall)// recive, y ahora emit a caller      
     },[])
     const onAnswerCall =useCallback((ongoingCall)=>{
-      console.log('onAnswerCall de socket, recibe ongoincall', ongoingCall);
       isCallerRef.current=true
       setongoingCallRef.current= {...ongoingCall,isCaller:isCallerRef}
       emitSignal(true)
@@ -218,14 +207,12 @@ export const ContextProvider = (props) => {
 
         socket.on('incommingCall', onInComingCall);
         socket.on('answerCall',onAnswerCall);   
-        /* socket.on('hangup', handleHungup ); */
         
         return () => {
           socket.off('incommingCall', onInComingCall);
           socket.off('answerCall',onAnswerCall);   
-            /* socket.off('hangup', handleHungup ); */
         }
-    }, [socket, isSocketConnected, /* completePeerConnection */ /* handleHungup */]);
+    }, [socket, isSocketConnected]);
 
     useEffect(() => {
         let timeout;
