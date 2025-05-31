@@ -94,7 +94,7 @@ export const ContextProvider = (props) => {
     },[ongoingCall])
     const handleJoinCall =useCallback((ongoingCall)=>{
       setongoingCallRef.current={ ...ongoingCall, isRinging: false }
-      setongoingCall({ ...ongoingCall, isRinging: true })
+      setongoingCall({ ...ongoingCall, isRinging: false })
       socketRef.current.emit('answerCall', ongoingCall)// recive, y ahora emit a caller      
     },[])
     const onAnswerCall =useCallback((ongoingCall)=>{
@@ -232,16 +232,12 @@ export const ContextProvider = (props) => {
   return (
     <PeerContext.Provider
         value={{
-            peer,
             socket,
             peerOnData,
             onlineUsers,
-            setongoingCallRef,
             ongoingCall,
-            emitSignal,
             emitPData,
             handleCall,
-            onInComingCall,
             handleJoinCall,
         }}
         {...props}

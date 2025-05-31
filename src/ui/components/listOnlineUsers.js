@@ -6,8 +6,8 @@ const ListOnlineUsers=()=>{
     return (<>
         {onlineUsers && onlineUsers?.length>0 && onlineUsers?.map(onlineUser =>{ 
             if(onlineUser.socketId == socket?.id) return null
-            return <div key={onlineUser.socketId} onClick={()=> handleCall(onlineUser)} className="flex items-center space-x-4 p-2 border-b border-gray-200"> 
-                <div>{onlineUser.socketId}</div>
+            return <div key={onlineUser.socketId} onClick={()=> handleCall(onlineUser)} className="flex items-center space-x-4 mx-4 border-b border-gray-200" style={{ padding: '1rem'}} > 
+                <div >{onlineUser.socketId}</div>
                 <div>aqui estoy</div>
             </div>
         })}

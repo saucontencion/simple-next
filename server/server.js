@@ -40,12 +40,8 @@ app.prepare().then(() => {
       io.emit('getUsers',onlineUsers)
     })
     socket.on('webrtcSignal',(data)=> {
-      console.log('en server webrtcsignal'); 
       onWebrtcSignal(io,socket, data)
-/*       setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),1000)
- *//*       setTimeout(()=> socket.broadcast.emit('webrtcSignal',data),2000)
- */      }
-    );
+    });
     socket.on('call',(participants) => {
       onCall(io, participants);
     })
