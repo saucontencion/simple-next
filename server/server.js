@@ -27,9 +27,7 @@ app.prepare().then(() => {
       socketId && !onlineUsers.some(user => user == socketId.id) &&isSocketConnected&& onlineUsers.push({
         socketId})      
       if (!isSocketConnected) {
-        onlineUsers = onlineUsers.filter(user => user.socketId !== socket.id)
-        console.log('dentro del if addnew user !iscocket ');
-        
+        onlineUsers = onlineUsers.filter(user => user.socketId !== socket.id)        
       }
       io.emit('getUsers',onlineUsers)
     })

@@ -50,3 +50,5 @@
 8. [ ] Documentar el proceso de configuración e implementación.
 9. [ ] Realizar pruebas finales y ajustes necesarios.
 
+
+[O] integrar a blue.nest.next

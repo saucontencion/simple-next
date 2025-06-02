@@ -52,9 +52,6 @@ export const ContextProvider = (props) => {
   }, []);
   
   const emitSignal = useCallback(() => {
-    console.log('emitSignal sdp', sdp);
-    console.log('peer type:', typeof(peer));
-    console.log('peer object:', peer);
     
     if (!peerRef.current) {
       console.log('No peer available, initializing one');
@@ -64,6 +61,7 @@ export const ContextProvider = (props) => {
     }
     
     if (sdpRef.current) {
+      // este nunca ocurre al parecer
       console.log('Signaling with:', sdpRef.current);
       peerRef.current.signal(sdpRef.current);
     } else {

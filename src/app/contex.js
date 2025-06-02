@@ -12,7 +12,6 @@ export const ContextProvider = (props) => {
 
   const [socket, setSocket] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-  const [sdp, setSdp]= useState(null);
   const [onlineUsers,setOnlineUsers]= useState(null);
   const [peerOnData, setPeerOnData] = useState([]);
   const [calledEnd,setCalledEnd] =useState(true)
@@ -26,9 +25,7 @@ export const ContextProvider = (props) => {
   const isCallerRef =useRef(false)
 
   const inicializarPeer = useCallback((initiator) => {
-    
-    console.log('og');
-    const p = new Peer({initiator,trickle: false})
+        const p = new Peer({initiator,trickle: false})
     
     p.on('error', err => console.log('error', err))
       
@@ -36,10 +33,6 @@ export const ContextProvider = (props) => {
       console.log('SIGNAL', JSON.stringify(data))
       let signalpre = JSON.stringify(data);
       let dataSignal = signalpre.slice(0)
-      let extracParticipants = initiator
-            ? { receiver: socketRef.current.id }
-            : { caller: socketRef.current.id };
-      setSdp(dataSignal)
       sdpRef.current = dataSignal;
       if (socketRef.current) {
         console.log('emitiendo webrtcsignal');
@@ -64,7 +57,7 @@ export const ContextProvider = (props) => {
     
     setPeer(p)
     peerRef.current = p
-    }, [peer,socket,sdp]);
+    }, [peer,socket]);
 
   const emitSignal = useCallback((initiator) => {
       if(!peerRef.current){
@@ -131,22 +124,31 @@ export const ContextProvider = (props) => {
             setIsSocketConnected(false);
             console.log("DISCONNECTED");
         };
-        
+
+        const handleConnect = () => {
+        console.log('llamado onConnect desde el evento onConnect');
+        onConnect();
+        };
+
         if (socket) {
-          socket.on("connect", onConnect);
+          console.log("🟡 Registrando listener 'connect'");
+          socket.on("connect", handleConnect);
           socket.on("disconnect", onDisconnect);
         }
-        if (socketRef.current.connected) {
+        if (socketRef.current.connected && !isSocketConnected) {
           console.log("⚡ Chrome: conexión síncrona detectada");
-          socketRef.current.on("connectE", onConnect());
+          socketRef.current.on("connectE", onConnect);
             // Emitir el evento manualmente o llamar la función directamente
-            socketRef.current.emit("connectE"); // Forzar el evento
+          socketRef.current.emit("connectE"); // Forzar el evento
         }
           
           return () => {
             if (socket) {
-              socket.off("connect", onConnect);
+              socket.off("connect", handleConnect);
               socket.off("disconnect", onDisconnect);
+              if (socketRef.current) {
+                  socketRef.current.off("connectE", onConnect); // 👈 Desmontaje correcto
+              }
             }
         };
     }, [socket, isSocketConnected]);
@@ -182,7 +184,6 @@ export const ContextProvider = (props) => {
       if (!socket || !isSocketConnected ) return;
       socket.emit('addNewUser', socketRef.current.id, isSocketConnected);
       socket.on('getUsers', (res) => {
-          console.log('Res de getUsers: que sera Online users', res);
           setOnlineUsers(res);
       });
 
