@@ -68,7 +68,7 @@ export const ContextProvider = (props) => {
 
   const emitSignal = useCallback((initiator) => {
       if(!peerRef.current){
-        initiatorRef.current= initiator
+        initiatorRef.current= initiator;
         inicializarPeer(initiator)
         return
       }
